@@ -117,7 +117,7 @@ k.scene("plot",()=> {
 
     const text6=k.add([
         k.text("DETECT AND STOP THEM .",{size:30,font:"dos"}),
-        k.pos(250,50),
+        k.pos(200,50),
         k.opacity(0),
         k.rotate(40),
     ])
@@ -137,11 +137,25 @@ k.scene("plot",()=> {
     if (enter===5){
     k.tween(0,1,1,(opa) => (text5.opacity=opa))}
     if (enter===6){
-    for(te of k.get("t1")){te.opacity=0}
+    k.destroyAll("t1");
     k.shake(10)
     k.tween(0,1,1,(opa) => (text6.opacity=opa))}
-
-
+    if (enter === 7){
+        k.go("game")
+    }
 });
+
+k.scene("game",()=> {
+
+
 })
+
+
+
+
+
+})
+
+
+
 k.go("main")
