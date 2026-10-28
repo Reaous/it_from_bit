@@ -9,11 +9,21 @@ const k = kaplay({
 });
 
 k.loadRoot("./"); 
+
+k.loadFont("dos","font/ModernDOS9x16.ttf")
+
+k.loadSound("boot","audio/boot.mp3")
+
+
+
 k.loadSprite("crt","sprites/crt.png")
-k.loadSprite("cursor","sprites/cursor.png")
+k.loadSprite("menu","sprites/menu.png")
 
 
-k.scene("menu", ()=> {
+let desktop ;
+let gif;
+
+k.scene("main", ()=> {
 
     k.add([
         k.rect(700,200),
@@ -22,26 +32,116 @@ k.scene("menu", ()=> {
     ])
 
 
-    k.add([
+    const crt = k.add([
         k.sprite("crt"),
-        k.pos(200,50),
-        k.scale(1.5)
+        k.pos(150,30),
+        k.scale(2.3)
 
     ])
+
+        const menu =crt.add ([
+        k.sprite("menu",{width:115,height:82}),
+        k.pos(19,17)
+        
+    ])
+
+
+    const text =crt.add([
+        k.text("IT FROM BIT\n-Reaous\nStart by pressing ENTER\n &**$*@#(*@\n(!$$&@@($*&let\nus3218742984293FREE",{font:"dos",size:8}),
+        k.pos(30,40)
+        
+    ]);
+
+    let audio=false;
+    k.onKeyPress("enter",()=>{
+    if (audio===false) {
+        const boot =k.play("boot")
+        audio=true
+        k.wait(1,()=> {
+        boot.paused=true;
+        k.go("plot");
+        })}})
+    
+
+});
+
+
+k.scene("plot",()=> {
 
     k.add([
-        k.sprite("cursor"),
-        k.pos(250,150),
-        k.scale(2)
+        k.text("(Press enter)",{size:12,font:"dos"}),
+        k.pos(300,0)
+    ])
+    
+    const text1 =k.add([
+        k.opacity(0),
+        k.text("1989",{font:"dos"}),
+        k.z(0),
+        k.pos(50,30),
+        "t1"
+        
+    ])
+
+    const text2=k.add([
+        k.text("The invention of bits and world wide web connected\nmankind to every nook and crany of the world.",{size:16 ,font :"dos"}),
+        k.pos(text1.pos.x,text1.pos.y +40),
+        k.opacity(0),
+        "t1"
+    ])
+
+    const text3=k.add([
+        k.text("But people started noticing strage phenomena , \nwhere it seems bits were altered by something(?)\nin a way which made....communication .",{size:16,font:"dos"}),
+        k.pos(text2.pos.x,text2.pos.y +40),
+        k.opacity(0),
+        "t1"
+
+
+    ])
+
+    const text4=k.add([
+        k.text("The smartest minds couldnt figure out , and the theologists came.\nThey preached it was god.they worshipped it like a cult\n,until IT started asking for sacrifices and \nsome kind of RETURN.",{size:16,font:"dos"}),
+        k.pos(text3.pos.x,text3.pos.y +60),
+        k.opacity(0),
+        "t1"
+
+    ])
+
+    const text5=k.add([
+        k.text("Gif are most vulnerbale to them since \nits small and easy to corrupt.",{size:16,font:"dos"}),
+        k.pos(text3.pos.x,text3.pos.y +150),
+        k.opacity(0),
+        "t1"
+
     ])
 
 
+    const text6=k.add([
+        k.text("DETECT AND STOP THEM .",{size:30,font:"dos"}),
+        k.pos(250,50),
+        k.opacity(0),
+        k.rotate(40),
+    ])
+
+    k.tween(0,1,1,(opa) => (text1.opacity=opa));
+
+    let te 
+    let enter=1
+    k.onKeyPress("enter",()=> {
+    enter++
+    if (enter===2){
+    k.tween(0,1,1,(opa) => (text2.opacity=opa))}
+    if (enter===3){
+    k.tween(0,1,1,(opa) => (text3.opacity=opa))}
+    if (enter===4){
+    k.tween(0,1,1,(opa) => (text4.opacity=opa))}
+    if (enter===5){
+    k.tween(0,1,1,(opa) => (text5.opacity=opa))}
+    if (enter===6){
+    for(te of k.get("t1")){te.opacity=0}
+    k.shake(10)
+    k.tween(0,1,1,(opa) => (text6.opacity=opa))}
 
 
-
-
-
-
+});
 })
-
-k.go("menu")
+k.go("main")
