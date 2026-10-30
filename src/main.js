@@ -21,6 +21,16 @@ k.loadSprite("menu","sprites/menu.png")
 k.loadSprite("bg2","sprites/bg2.jpg")
 k.loadSprite("crtbg","sprites/crtbg.png")
 
+//gifssssssss (hope not a headache lets pray)
+
+k.loadSprite("clown","gif/clown.png",{
+    sliceX: 4,
+    sliceY: 3,
+    anims: {
+        normal : { from: 0,to:11 , loop:true}
+    }
+})
+
 
 let desktop ;
 let gif;
@@ -177,6 +187,11 @@ const tutorialtext= k.add([
     k.pos(80,5)
 ])
 
+const clown = bg.add([
+    k.sprite("clown", {anim:"normal"}),
+    k.pos(100,50),
+    k.scale(1)
+])
 
 
 });
