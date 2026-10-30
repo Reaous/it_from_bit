@@ -18,6 +18,8 @@ k.loadSound("boot","audio/boot.mp3")
 
 k.loadSprite("crt","sprites/crt.png")
 k.loadSprite("menu","sprites/menu.png")
+k.loadSprite("bg2","sprites/bg2.jpg")
+k.loadSprite("crtbg","sprites/crtbg.png")
 
 
 let desktop ;
@@ -55,7 +57,7 @@ k.scene("main", ()=> {
     let audio=false;
     k.onKeyPress("enter",()=>{
     if (audio===false) {
-        const boot =k.play("boot")
+        const boot =k.play("boot",{volume:0.5})
         audio=true
         k.wait(1,()=> {
         boot.paused=true;
@@ -107,7 +109,7 @@ k.scene("plot",()=> {
     ])
 
     const text5=k.add([
-        k.text("Gif are most vulnerbale to them since \nits small and easy to corrupt.",{size:16,font:"dos"}),
+        k.text("Gif are most vulnerable to {them} since \nits small and easy to corrupt.",{size:16,font:"dos"}),
         k.pos(text3.pos.x,text3.pos.y +150),
         k.opacity(0),
         "t1"
@@ -145,17 +147,46 @@ k.scene("plot",()=> {
     }
 });
 
+})
+
+
 k.scene("game",()=> {
 
-
-})
-
+//todo: fix the art of fish eye bg of computer and the pc not mathcing up , im too damn tired
 
 
+k.add([
+    k.sprite("bg2", {width:k.width(),height:k.height()})
+]);
+
+const crt = k.add([
+    k.sprite("crt"),
+    k.pos(200,130),
+    k.scale(1.5),
+
+])
+
+const bg = crt.add([
+    k.sprite("crtbg"),
+    k.scale(0.35),
+    k.pos(-10,10)
+])
+
+const tutorialtext= k.add([
+    k.text("Press left arrow to report , Right arrow to approve.", {size:16,font:"dos"}),
+    k.pos(100,5)
+])
 
 
-})
+
+
+});
 
 
 
-k.go("main")
+
+
+
+
+//change desitnation after doing that shit
+k.go("game")
