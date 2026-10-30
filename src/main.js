@@ -173,10 +173,9 @@ const bg = crt.add([
 ])
 
 const tutorialtext= k.add([
-    k.text("Press left arrow to report , Right arrow to approve.", {size:16,font:"dos"}),
-    k.pos(100,5)
+    k.text("Press left arrow to report , Right arrow to approve the gifs\nRemember if you find anything weird REPORT.", {size:16,font:"dos"}),
+    k.pos(80,5)
 ])
-
 
 
 
@@ -184,9 +183,33 @@ const tutorialtext= k.add([
 
 
 
+k.scene("shaders",()=> {
+const light = ()=> ({
+    "u_radius" :10 ,
+    "u_blur" : 10 ,
+    "u_resolution" :k.vec2(k.width(),k.height()),
+    "u_mouse" :k.mousePos()
+
+})
+
+k.loadShaderURL("light", null,'shader/light.frag')
 
 
+const screen = ()=>({
+    "u_intensity" :12
+
+})
+
+k.loadShaderURL("screen",null,"shader/crt.frag")
+
+k.usePostEffect("screen",screen())
+
+k.onUpdate(()=> {
+    k.usePostEffect("light",light())
+
+})
+});
 
 
-//change desitnation after doing that shit
+//change desitnation after doing scene of game
 k.go("game")
