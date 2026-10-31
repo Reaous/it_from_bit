@@ -18,6 +18,7 @@ k.loadSound("clown","audio/scream.mp3")
 k.loadSound("trumpetb","audio/trumpetb.mp3")
 k.loadSound("menubg","audio/menubg.mp3")
 k.loadSound("tomato","audio/tomato.mp3")
+k.loadSound("pchime","audio/chimepositive.mp3")
 
 
 k.loadSprite("crt","sprites/crt.png")
@@ -56,7 +57,7 @@ k.loadSprite('tomato',"gif/tomato.png",{
 
 
 
-let iscursed =false
+let iscursed ;
 const gifs = [ {name:"clown",iscursed:false,sound:"clown",activity :"none"},
     {name:"skull",iscursed:true,sound:"trumpetb",activity:"screenbg"},
     {name:"tomato",iscursed:false,sound:"tomato",activity:"none"}
@@ -204,6 +205,13 @@ let currentaudio;
 let currentIndex=0
 let activity;
 
+k.tween(0,1,1, (opa)=> (tutorialtext.opacity = opa))
+let sanity = 0;
+k.add([
+    k.text(sanity),
+    k.pos(50,200)
+])
+
 k.add([
     k.sprite("bg2", {width:k.width(),height:k.height()})
 ]);
@@ -245,10 +253,12 @@ const tutorialtext= k.add([
     
 ])
 
-k.tween(0,1,1, (opa)=> (tutorialtext.opacity = opa))
+
+let current ;
+
 
 const acitivtyscreen = () => {
-    const current = gifs[currentIndex]
+    current = gifs[currentIndex]
     
     if (current.activity === "screenbg"){
     bg.add([
@@ -259,20 +269,17 @@ const acitivtyscreen = () => {
     k.color(rgb(249, 5, 5)),
     k.opacity(0.1),
     "active"
-    
-        ])
+     ])
     }
-
 
 
 }
 
 
+let gifonscreen;
 const gifscreen = () => {
-k.destroyAll("active")
-
-const current = gifs[currentIndex]
-bg.add([
+ current = gifs[currentIndex]
+gifonscreen = bg.add([
     k.sprite(current.name,{anim:"normal"}),
     k.pos(150,70),
     k.z(10),
@@ -286,16 +293,33 @@ bg.add([
 };
 
 let screenon = false;
-
 k.onKeyPress("enter",()=>{
 gifscreen();
 k.tween(1,0,1,(opa) =>tutorialtext.opacity=opa);
 screenon =true;
+k.shake(2);
+k.destroyAll("scold")
 });
 
 k.onKeyPress("right",()=> {
 
+
+
 if (screenon === true){
+gifonscreen.destroy("active")
+currentaudio.paused=true;
+
+     if (current.iscursed===false){
+    k.wait(0.5,()=>{
+        const pchime =k.play("pchime")
+        pchime.speed =1.5
+        })
+    }
+
+    if (current.iscursed ===true){
+        sanity++
+    }
+
 
         arr.scale=k.vec2(0.12)
     k.wait(0.2,()=>{
@@ -308,19 +332,31 @@ if (screenon === true){
         k.z(10),
         "load"
     ]);
-    k.wait(1,()=>{
+    k.wait(1.5,()=>{
         currentIndex++
         currentaudio.paused=true;
         loading.destroy("load")
         gifscreen();
     });
 }}
+
+if (screenon ===false){
+    k.shake(10);
+    k.add([
+        k.text("Press ENTER",{font:"dos"}),
+        k.pos(260,100),
+        "scold"
+    ])
+}
 });
+
 
 k.onKeyPress("left",()=> {
 
 
 if (screenon === true){
+ currentaudio.paused=true;
+ gifonscreen.destroy("active")
 
         arl.scale=k.vec2(0.12)
     k.wait(0.2,()=>{
@@ -332,13 +368,24 @@ if (screenon === true){
         k.z(10),
         "load"
     ]);
-    k.wait(1,()=>{
+    k.wait(1.5,()=>{
         currentIndex++
-        currentaudio.paused=true;
         loading.destroy("load")
         gifscreen();
     });
+
+
 }
+
+if (screenon ===false){
+    k.shake(10);
+    k.add([
+        k.text("Press ENTER",{font:"dos"}),
+        k.pos(260,100),
+        "scold"
+    ])
+}
+
 });
 
 
