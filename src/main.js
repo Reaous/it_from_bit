@@ -25,6 +25,7 @@ k.loadSprite("menu","sprites/menu.png")
 k.loadSprite("bg2","sprites/bg2.jpg")
 k.loadSprite("crtbg","sprites/crtbg.png")
 k.loadSprite("arrow","sprites/arrow.png")
+k.loadSprite("load","sprites/load.png")
 
 //gifssssssss 
 
@@ -257,6 +258,7 @@ const acitivtyscreen = () => {
     k.z(0),
     k.color(rgb(249, 5, 5)),
     k.opacity(0.1),
+    "active"
     
         ])
     }
@@ -271,7 +273,6 @@ const gifscreen = () => {
 k.destroyAll("active")
 
 const current = gifs[currentIndex]
-
 bg.add([
     k.sprite(current.name,{anim:"normal"}),
     k.pos(150,70),
@@ -283,24 +284,50 @@ bg.add([
  currentaudio =k.play(current.sound)
 
  acitivtyscreen();
-
 };
+
 
 k.onKeyPress("enter",()=>{
 gifscreen();
-k.tween(1,0,1,(opa) =>tutorialtext.opacity=opa)
+k.tween(1,0,1,(opa) =>tutorialtext.opacity=opa);
+entercount++;
+screenon =true;
 });
 
+let screenon = false;
+
+if (screenon === true){
 k.onKeyPress("right",()=> {
+    bg.add([
+        k.sprite('load'),
+        k.z(10),
+        "load"
+    ]);
     k.wait(1,()=>{
         currentIndex++
         currentaudio.paused=true;
-        gifscreen();})
+        k.destroyAll("load")
+        gifscreen();
+    });
 });
 
+k.onKeyPress("left",()=> {
+    bg.add([
+        k.sprite('load'),
+        k.z(10),
+        "load"
+    ]);
+    k.wait(1,()=>{
+        currentIndex++
+        currentaudio.paused=true;
+        k.destroyAll("load")
+        gifscreen();
+    });
 });
+}
 
-
+});
+        
 
 k.scene("shaders",()=> {
 const light = ()=> ({
