@@ -12,18 +12,21 @@ k.loadRoot("./");
 
 k.loadFont("dos","font/ModernDOS9x16.ttf")
 
+k.loadSound("impact","audio/impact.mp3")
 k.loadSound("boot","audio/boot.mp3")
 k.loadSound("clown","audio/scream.mp3")
 k.loadSound("trumpetb","audio/trumpetb.mp3")
+k.loadSound("menubg","audio/menubg.mp3")
+k.loadSound("tomato","audio/tomato.mp3")
 
 
 k.loadSprite("crt","sprites/crt.png")
 k.loadSprite("menu","sprites/menu.png")
 k.loadSprite("bg2","sprites/bg2.jpg")
 k.loadSprite("crtbg","sprites/crtbg.png")
+k.loadSprite("arrow","sprites/arrow.png")
 
-
-//gifssssssss (hope not a headache lets pray)
+//gifssssssss 
 
 k.loadSprite("clown","gif/clown.png",{
     sliceX: 4,
@@ -39,15 +42,32 @@ k.loadSprite("skull","gif/skull.png",{
     }
 })
 
+k.loadSprite('tomato',"gif/tomato.png",{
+    sliceX:4,
+    sliceY:4,
+    anims:{
+        normal :{from:0,to:6,loop:true}}
+})
+
+
+
+
+
+
+
 let iscursed =false
 const gifs = [ {name:"clown",iscursed:false,sound:"clown",activity :"none"},
-    {name:"skull",iscursed:true,sound:"trumpetb",activity:"light_out"}
+    {name:"skull",iscursed:true,sound:"trumpetb",activity:"screenbg"},
+    {name:"tomato",iscursed:false,sound:"tomato",activity:"none"}
 ]
 
+let menubg;
 
 
 
 k.scene("main", ()=> {
+
+    menubg =k.play("menubg");
 
     k.add([
         k.rect(700,200),
@@ -71,7 +91,7 @@ k.scene("main", ()=> {
 
 
     const text =crt.add([
-        k.text("IT FROM BIT\n-Reaous\nStart by pressing ENTER\n &**$*@#(*@\n(!$$&@@($*&let\nus3218742984293FREE",{font:"dos",size:8}),
+        k.text("IT FROM BIT\n-Reaous\nStart by pressing ENTER\n &**$*@#(*@\n(!$$@($*&let\nus3218742984293FREE",{font:"dos",size:8}),
         k.pos(30,40)
         
     ]);
@@ -162,12 +182,15 @@ k.scene("plot",()=> {
     k.tween(0,1,1,(opa) => (text5.opacity=opa))}
     if (enter===6){
     k.destroyAll("t1");
+    k.play("impact",{volume:0.5})
     k.shake(10)
     k.tween(0,1,1,(opa) => (text6.opacity=opa))}
     if (enter === 7){
+        menubg.paused = true;
         k.go("game")
     }
 });
+
 
 })
 
@@ -178,6 +201,7 @@ k.scene("game",()=> {
 
 let currentaudio;
 let currentIndex=0
+let activity;
 
 k.add([
     k.sprite("bg2", {width:k.width(),height:k.height()})
@@ -201,10 +225,28 @@ const tutorialtext= k.add([
     k.pos(80,5)
 ])
 
+const acitivtyscreen = () => {
+    const current = gifs[currentIndex]
+    
+    if (current.activity === "screenbg"){
+    bg.add([
+    k.sprite("crtbg"),
+    k.scale(1),
+    k.pos(10,10),
+    k.z(0),
+    k.color(rgb(249, 5, 5)),
+    k.opacity(0.1),
+    
+        ])
+    }
 
+
+
+}
 
 
 const gifscreen = () => {
+
 k.destroyAll("active")
 
 const current = gifs[currentIndex]
@@ -212,22 +254,25 @@ const current = gifs[currentIndex]
 bg.add([
     k.sprite(current.name,{anim:"normal"}),
     k.pos(150,70),
-
+    k.z(10),
     "active"
 ])
 
 
  currentaudio =k.play(current.sound)
 
+ acitivtyscreen();
+
 };
 
 gifscreen();
 
 
-k.onKeyPress("w",()=> {
-    currentIndex++
-    currentaudio.paused=true;
-    gifscreen();
+k.onKeyPress("right",()=> {
+    k.wait(1,()=>{
+        currentIndex++
+        currentaudio.paused=true;
+        gifscreen();})
 });
 
 });
@@ -262,5 +307,4 @@ k.onUpdate(()=> {
 });
 
 
-//change desitnation after doing scene of game
 k.go("main")
