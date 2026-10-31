@@ -207,6 +207,23 @@ k.add([
     k.sprite("bg2", {width:k.width(),height:k.height()})
 ]);
 
+const arr = k.add([
+    k.sprite("arrow"),
+    k.pos(330,285),
+    k.scale(0.1),
+    k.z(15),
+    k.color(rgb(177, 169, 169))
+])
+
+const arl= k.add([
+    k.sprite("arrow"),
+    k.pos(320,317),
+    k.scale(0.1),
+    k.z(15),
+    k.color(rgb(177, 169, 169)),
+    k.rotate(180)
+])
+
 const crt = k.add([
     k.sprite("crt"),
     k.pos(200,130),
@@ -221,9 +238,13 @@ const bg = crt.add([
 ])
 
 const tutorialtext= k.add([
-    k.text("Press left arrow to report , Right arrow to approve the gifs\nRemember if you find anything weird REPORT.", {size:16,font:"dos"}),
-    k.pos(80,5)
+    k.text("Press left arrow to report , Right arrow to approve the gifs\nRemember if you find anything weird REPORT.\n Press ENTER to start", {size:16,font:"dos"}),
+    k.pos(80,60),
+    k.opacity(0)
+    
 ])
+
+k.tween(0,1,1, (opa)=> (tutorialtext.opacity = opa))
 
 const acitivtyscreen = () => {
     const current = gifs[currentIndex]
@@ -265,8 +286,10 @@ bg.add([
 
 };
 
+k.onKeyPress("enter",()=>{
 gifscreen();
-
+k.tween(1,0,1,(opa) =>tutorialtext.opacity=opa)
+});
 
 k.onKeyPress("right",()=> {
     k.wait(1,()=>{
@@ -307,4 +330,4 @@ k.onUpdate(()=> {
 });
 
 
-k.go("main")
+k.go("game")
