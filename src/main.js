@@ -13,13 +13,15 @@ k.loadRoot("./");
 k.loadFont("dos","font/ModernDOS9x16.ttf")
 
 k.loadSound("boot","audio/boot.mp3")
-
+k.loadSound("clown","audio/scream.mp3")
+k.loadSound("trumpetb","audio/trumpetb.mp3")
 
 
 k.loadSprite("crt","sprites/crt.png")
 k.loadSprite("menu","sprites/menu.png")
 k.loadSprite("bg2","sprites/bg2.jpg")
 k.loadSprite("crtbg","sprites/crtbg.png")
+
 
 //gifssssssss (hope not a headache lets pray)
 
@@ -28,12 +30,22 @@ k.loadSprite("clown","gif/clown.png",{
     sliceY: 3,
     anims: {
         normal : { from: 0,to:11 , loop:true}
+    }})
+k.loadSprite("skull","gif/skull.png",{
+    sliceX:4,
+    sliceY:4,
+    anims:{
+        normal : {from:0,to:13,loop:true}
     }
 })
 
+let iscursed =false
+const gifs = [ {name:"clown",iscursed:false,sound:"clown",activity :"none"},
+    {name:"skull",iscursed:true,sound:"trumpetb",activity:"light_out"}
+]
 
-let desktop ;
-let gif;
+
+
 
 k.scene("main", ()=> {
 
@@ -164,6 +176,8 @@ k.scene("game",()=> {
 
 //todo: fix the art of fish eye bg of computer and the pc not mathcing up , im too damn tired
 
+let currentaudio;
+let currentIndex=0
 
 k.add([
     k.sprite("bg2", {width:k.width(),height:k.height()})
@@ -187,12 +201,34 @@ const tutorialtext= k.add([
     k.pos(80,5)
 ])
 
-const clown = bg.add([
-    k.sprite("clown", {anim:"normal"}),
-    k.pos(100,50),
-    k.scale(1)
+
+
+
+const gifscreen = () => {
+k.destroyAll("active")
+
+const current = gifs[currentIndex]
+
+bg.add([
+    k.sprite(current.name,{anim:"normal"}),
+    k.pos(150,70),
+
+    "active"
 ])
 
+
+ currentaudio =k.play(current.sound)
+
+};
+
+gifscreen();
+
+
+k.onKeyPress("w",()=> {
+    currentIndex++
+    currentaudio.paused=true;
+    gifscreen();
+});
 
 });
 
@@ -227,4 +263,4 @@ k.onUpdate(()=> {
 
 
 //change desitnation after doing scene of game
-k.go("game")
+k.go("main")
