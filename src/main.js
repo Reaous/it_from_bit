@@ -269,7 +269,6 @@ const acitivtyscreen = () => {
 
 
 const gifscreen = () => {
-
 k.destroyAll("active")
 
 const current = gifs[currentIndex]
@@ -286,19 +285,25 @@ bg.add([
  acitivtyscreen();
 };
 
+let screenon = false;
 
 k.onKeyPress("enter",()=>{
 gifscreen();
 k.tween(1,0,1,(opa) =>tutorialtext.opacity=opa);
-entercount++;
 screenon =true;
 });
 
-let screenon = false;
+k.onKeyPress("right",()=> {
 
 if (screenon === true){
-k.onKeyPress("right",()=> {
-    bg.add([
+
+        arr.scale=k.vec2(0.12)
+    k.wait(0.2,()=>{
+        arr.scale = k.vec2(0.1)
+    })
+
+{
+    const loading = bg.add([
         k.sprite('load'),
         k.z(10),
         "load"
@@ -306,13 +311,23 @@ k.onKeyPress("right",()=> {
     k.wait(1,()=>{
         currentIndex++
         currentaudio.paused=true;
-        k.destroyAll("load")
+        loading.destroy("load")
         gifscreen();
     });
+}}
 });
 
 k.onKeyPress("left",()=> {
-    bg.add([
+
+
+if (screenon === true){
+
+        arl.scale=k.vec2(0.12)
+    k.wait(0.2,()=>{
+        arl.scale = k.vec2(0.1)
+    })
+
+    const loading = bg.add([
         k.sprite('load'),
         k.z(10),
         "load"
@@ -320,11 +335,12 @@ k.onKeyPress("left",()=> {
     k.wait(1,()=>{
         currentIndex++
         currentaudio.paused=true;
-        k.destroyAll("load")
+        loading.destroy("load")
         gifscreen();
     });
-});
 }
+});
+
 
 });
         
