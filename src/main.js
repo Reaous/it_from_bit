@@ -35,6 +35,7 @@ k.loadSprite("bg2","sprites/bg2.jpg")
 k.loadSprite("crtbg","sprites/crtbg.png")
 k.loadSprite("arrow","sprites/arrow.png")
 k.loadSprite("load","sprites/load.png")
+k.loadSprite("gj","sprites/gj.png")
 //gifssssssss 
 
 k.loadSprite("clown","gif/clown.png",{
@@ -401,13 +402,16 @@ gifonscreen = bg.add([
 let screenon = false;
 
 k.onKeyPress("enter",()=>{
-
-gifscreen();
-k.tween(1,0,1,(opa) =>tutorialtext.opacity=opa);
-screenon =true;
-k.shake(2);
-k.destroyAll("scold")
-
+if (screenon === false) {
+    gifscreen();
+    k.tween(1,0,1,(opa) =>tutorialtext.opacity=opa);
+    screenon =true;
+    k.shake(2);
+    k.destroyAll("scold")
+}
+if (screenon === true) {
+    //does nothing as its supposed to do fucking made me search for it for 10 mins 
+};
 });
 
 k.onKeyPress("right",()=> {
@@ -418,11 +422,21 @@ gifonscreen.destroy("active")
 currentaudio.paused=true;
 
      if (current.iscursed===false){
-    k.wait(0.5,()=>{
+
+        const gj = k.add([
+        k.sprite("gj"),
+        k.pos(350,80),
+        k.scale(0.2)
+    ])
+
+    k.wait(0.3,()=>{
         const pchime =k.play("pchime")
         pchime.speed =1.5
         pchime.volume = 0.3
         })
+
+    k.tween(1,0,0.5,(opa) => (gj.opacity=opa))
+
     }
 
     if (current.iscursed ===true){
