@@ -14,7 +14,7 @@ k.loadFont("dos","font/ModernDOS9x16.ttf")
 
 k.loadShaderURL("light", null,'shader/light.frag')
 
-
+k.loadSound("voice","audio/voice.wav")
 k.loadSound("impact","audio/impact.mp3")
 k.loadSound("boot","audio/boot.mp3")
 k.loadSound("clown","audio/clown.mp3")
@@ -344,8 +344,8 @@ if(current.activity === "light"){
 k.wait(1,()=> {
     k.shake(2);
     const light = ()=> ({
-    "u_radius" :10 ,
-    "u_blur" : 30 ,
+    "u_radius" :15 ,
+    "u_blur" : 20 ,
     "u_resolution" :k.vec2(k.width(),k.height()),
     "u_mouse" :k.mousePos()});
     switchcontext =true ;
@@ -370,8 +370,12 @@ k.onClick("switch",()=> {
 }
 
 if (switchcontext === true){
+    k.shake(2);
+    k.play("voice")
+    k.wait(5,()=> {
     k.usePostEffect(null);
     switchcontext = false;
+    });
 }
  })
 
