@@ -36,6 +36,7 @@ k.loadSprite("crtbg","sprites/crtbg.png")
 k.loadSprite("arrow","sprites/arrow.png")
 k.loadSprite("load","sprites/load.png")
 k.loadSprite("gj","sprites/gj.png")
+k.loadSprite("momo","sprites/momo.webp")
 //gifssssssss 
 
 k.loadSprite("clown","gif/clown.png",{
@@ -245,11 +246,6 @@ let currentIndex=0
 let activity;
 
 k.tween(0,1,1, (opa)=> (tutorialtext.opacity = opa))
-let sanity = 0;
-k.add([
-    k.text(sanity),
-    k.pos(50,200)
-])
 
 k.add([
     k.sprite("bg2", {width:k.width(),height:k.height()})
@@ -345,15 +341,17 @@ if(current.activity === "light"){
 k.wait(1,()=> {
     k.shake(2);
     const light = ()=> ({
-    "u_radius" :15 ,
-    "u_blur" : 20 ,
+    "u_radius" :10 ,
+    "u_blur" : 15 ,
     "u_resolution" :k.vec2(k.width(),k.height()),
     "u_mouse" :k.mousePos()});
+
     switchcontext =true ;
 
     k.onUpdate(()=> {
         if (switchcontext === true){
             k.usePostEffect("light",light())};
+
 
 })
 })
@@ -373,9 +371,22 @@ k.onClick("switch",()=> {
 if (switchcontext === true){
     k.shake(2);
     k.play("voice")
+
+    crt.pos =k.vec2(crt.pos.x +150 ,crt.pos.y);
+    arr.opacity =0;
+    arl.opacity=0;
+    k.add([
+        k.sprite("momo"),
+        k.pos(30,100),
+        k.scale(0.2),
+        "scare"
+    ])
     k.wait(5,()=> {
-    k.usePostEffect(null);
-    switchcontext = false;
+        k.destroy("scare")
+    
+    
+    
+
     });
 }
  })
@@ -414,12 +425,15 @@ if (screenon === true) {
 };
 });
 
+let isloading =false;
+
 k.onKeyPress("right",()=> {
 
-
+if (isloading ===false){
 if (screenon === true){
 gifonscreen.destroy("active")
 currentaudio.paused=true;
+isloading =true;
 
      if (current.iscursed===false){
 
@@ -439,11 +453,6 @@ currentaudio.paused=true;
 
     }
 
-    if (current.iscursed ===true){
-        sanity++
-    }
-
-
         arr.scale=k.vec2(0.12)
     k.wait(0.2,()=>{
         arr.scale = k.vec2(0.1)
@@ -459,9 +468,11 @@ currentaudio.paused=true;
         currentIndex++
         currentaudio.paused=true;
         loading.destroy("load")
+        isloading =false;        
         gifscreen();
 
     });
+
 }
 
 if (screenon ===false){
@@ -472,12 +483,14 @@ if (screenon ===false){
         "scold"
     ])
 }
+}
 });
 
 
 k.onKeyPress("left",()=> {
 
-
+if (isloading ===false){
+isloading =true;
 if (screenon === true){
  currentaudio.paused=true;
  gifonscreen.destroy("active")
@@ -496,6 +509,7 @@ if (screenon === true){
         currentIndex++
         loading.destroy("load")
         gifscreen();
+        isloading =false;
     });
 
 
@@ -509,7 +523,7 @@ if (screenon ===false){
         "scold"
     ])
 }
-
+}
 });
 
 
