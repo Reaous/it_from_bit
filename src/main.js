@@ -22,6 +22,8 @@ k.loadSound("pchime","audio/chimepositive.mp3")
 k.loadSound("gangsta","audio/gangsta.mp3")
 k.loadSound("nosig","audio/nosig.mp3")
 k.loadSound("screaming","audio/scream.mp3")
+k.loadSound("wave","audio/hi.mp3")
+k.loadSound("smile","audio/smile.mp3")
 
 
 k.loadSprite("crt","sprites/crt.png")
@@ -69,7 +71,21 @@ k.loadSprite("thumb","gif/thumb.png",{
     }
 })
 
+k.loadSprite("wave","gif/wave.png",{
+    sliceX:4,
+    sliceY:2,
+    anims:{
+        normal : {from:0,to:4,loop:true}
+    }
+})
 
+k.loadSprite("smile","gif/smile.png",{
+    sliceX:4,
+    sliceY:2,
+    anims:{
+        normal:{from:0,to:4,loop:true}
+    }
+})
 
 
 let iscursed ;
@@ -77,7 +93,9 @@ const gifs = [ {name:"clown",iscursed:false,sound:"clown",activity :"none"},
     {name:"skull",iscursed:true,sound:"trumpetb",activity:"screenbg"},
     {name:"tomato",iscursed:false,sound:"tomato",activity:"none"},
     {name:"gangsta",iscursed:false,sound:"gangsta",activity:"none"},
-    {name:"thumb",iscursed:true,sound:"nosig",activity:"screaming"}
+    {name:"thumb",iscursed:true,sound:"nosig",activity:"screaming"},
+    {name:"wave",iscursed:false,sound:"wave",activity:"none"},
+    {name:"smile",iscursed:true,sound:"smile",activity:"light"}
 ]
 
 let menubg;
@@ -307,8 +325,35 @@ const acitivtyscreen = () => {
 
         })
     })
-
     }
+
+    if(current.activity === "light"){
+
+    
+        k.wait(1,()=> {
+            k.shake(2);
+            const text =k.add([
+                k.text("The light went out. turn on the lights by the switch",{font:"dos",size:16}),
+                k.pos(100,50)
+
+            ])
+            k.tween(1,0,4,(opa) =>(text.opacity =opa));
+            const light = ()=> ({
+    "u_radius" :10 ,
+    "u_blur" : 10 ,
+    "u_resolution" :k.vec2(k.width(),k.height()),
+    "u_mouse" :k.mousePos()
+
+        })
+    k.loadShaderURL("light", null,'shader/light.frag')
+
+    k.onUpdate(()=> {
+    k.usePostEffect("light",light())
+
+})
+        })
+    }
+
 }
 
 
