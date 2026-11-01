@@ -261,15 +261,24 @@ const acitivtyscreen = () => {
     current = gifs[currentIndex]
     
     if (current.activity === "screenbg"){
-    bg.add([
+    const flicker =bg.add([
     k.sprite("crtbg"),
     k.scale(1),
     k.pos(10,10),
     k.z(0),
     k.color(rgb(249, 5, 5)),
-    k.opacity(0.1),
+    k.opacity(0),
     "active"
      ])
+     let duration = 0.1;
+     k.loop(2*duration,()=> {
+    const duration =k.rand(0.1,7)
+     k.tween(0,1,duration,(opa) => (flicker.opacity=opa))   
+     k.wait(duration,()=> {
+        k.tween(1,0,duration/2,(opa) => (flicker.opacity=opa));
+     })
+
+     })
     }
 
 
