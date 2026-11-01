@@ -14,11 +14,14 @@ k.loadFont("dos","font/ModernDOS9x16.ttf")
 
 k.loadSound("impact","audio/impact.mp3")
 k.loadSound("boot","audio/boot.mp3")
-k.loadSound("clown","audio/scream.mp3")
+k.loadSound("clown","audio/clown.mp3")
 k.loadSound("trumpetb","audio/trumpetb.mp3")
 k.loadSound("menubg","audio/menubg.mp3")
 k.loadSound("tomato","audio/tomato.mp3")
 k.loadSound("pchime","audio/chimepositive.mp3")
+k.loadSound("gangsta","audio/gangsta.mp3")
+k.loadSound("nosig","audio/nosig.mp3")
+k.loadSound("screaming","audio/scream.mp3")
 
 
 k.loadSprite("crt","sprites/crt.png")
@@ -27,7 +30,6 @@ k.loadSprite("bg2","sprites/bg2.jpg")
 k.loadSprite("crtbg","sprites/crtbg.png")
 k.loadSprite("arrow","sprites/arrow.png")
 k.loadSprite("load","sprites/load.png")
-
 //gifssssssss 
 
 k.loadSprite("clown","gif/clown.png",{
@@ -51,8 +53,21 @@ k.loadSprite('tomato',"gif/tomato.png",{
         normal :{from:0,to:6,loop:true}}
 })
 
+k.loadSprite("gangsta","gif/gangsta.png",{
+    sliceX:5,
+    sliceY:4,
+    anims:{
+        normal : {from:0,to:14,loop:true}
+    }
+})
 
-
+k.loadSprite("thumb","gif/thumb.png",{
+    sliceX:2,
+    sliceY:1,
+    anims:{
+        normal : {from:0,to:1,loop:true}
+    }
+})
 
 
 
@@ -60,7 +75,9 @@ k.loadSprite('tomato',"gif/tomato.png",{
 let iscursed ;
 const gifs = [ {name:"clown",iscursed:false,sound:"clown",activity :"none"},
     {name:"skull",iscursed:true,sound:"trumpetb",activity:"screenbg"},
-    {name:"tomato",iscursed:false,sound:"tomato",activity:"none"}
+    {name:"tomato",iscursed:false,sound:"tomato",activity:"none"},
+    {name:"gangsta",iscursed:false,sound:"gangsta",activity:"none"},
+    {name:"thumb",iscursed:true,sound:"nosig",activity:"screaming"}
 ]
 
 let menubg;
@@ -270,18 +287,28 @@ const acitivtyscreen = () => {
     k.opacity(0),
     "active"
      ])
-     let duration = 0.1;
-     k.loop(2*duration,()=> {
-    const duration =k.rand(0.1,7)
+
+    let duration = 0.1;
+    k.loop(4*duration, ()=> {
+    const duration =k.rand(0.13,0.15)
      k.tween(0,1,duration,(opa) => (flicker.opacity=opa))   
      k.wait(duration,()=> {
         k.tween(1,0,duration/2,(opa) => (flicker.opacity=opa));
      })
-
-     })
+     },4)
     }
 
+    if(current.activity === "screaming"){
+        k.wait(1,()=> {
+        const music =k.play("screaming")
+        k.shake(2);
+        k.wait(1,()=> {
+            music.paused=true;
 
+        })
+    })
+
+    }
 }
 
 
@@ -296,22 +323,24 @@ gifonscreen = bg.add([
 ])
 
 
- currentaudio =k.play(current.sound)
+ currentaudio =k.play(current.sound,{volume:0.5})
 
  acitivtyscreen();
 };
 
 let screenon = false;
+
 k.onKeyPress("enter",()=>{
+
 gifscreen();
 k.tween(1,0,1,(opa) =>tutorialtext.opacity=opa);
 screenon =true;
 k.shake(2);
 k.destroyAll("scold")
+
 });
 
 k.onKeyPress("right",()=> {
-
 
 
 if (screenon === true){
@@ -322,6 +351,7 @@ currentaudio.paused=true;
     k.wait(0.5,()=>{
         const pchime =k.play("pchime")
         pchime.speed =1.5
+        pchime.volume = 0.3
         })
     }
 
@@ -335,7 +365,7 @@ currentaudio.paused=true;
         arr.scale = k.vec2(0.1)
     })
 
-{
+    
     const loading = bg.add([
         k.sprite('load'),
         k.z(10),
@@ -346,8 +376,9 @@ currentaudio.paused=true;
         currentaudio.paused=true;
         loading.destroy("load")
         gifscreen();
+
     });
-}}
+}
 
 if (screenon ===false){
     k.shake(10);
