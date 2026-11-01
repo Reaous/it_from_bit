@@ -12,6 +12,9 @@ k.loadRoot("./");
 
 k.loadFont("dos","font/ModernDOS9x16.ttf")
 
+k.loadShaderURL("light", null,'shader/light.frag')
+
+
 k.loadSound("impact","audio/impact.mp3")
 k.loadSound("boot","audio/boot.mp3")
 k.loadSound("clown","audio/clown.mp3")
@@ -288,8 +291,17 @@ const tutorialtext= k.add([
     
 ])
 
+const button = k.add([
+    k.rect(30,30),
+    k.pos(30,300),
+    k.area(),
+    "switch"
+])
+
 
 let current ;
+
+let switchcontext = false;
 
 
 const acitivtyscreen = () => {
@@ -327,34 +339,43 @@ const acitivtyscreen = () => {
     })
     }
 
-    if(current.activity === "light"){
-
     
-        k.wait(1,()=> {
-            k.shake(2);
-            const text =k.add([
-                k.text("The light went out. turn on the lights by the switch",{font:"dos",size:16}),
-                k.pos(100,50)
-
-            ])
-            k.tween(1,0,4,(opa) =>(text.opacity =opa));
-            const light = ()=> ({
+if(current.activity === "light"){    
+k.wait(1,()=> {
+    k.shake(2);
+    const light = ()=> ({
     "u_radius" :10 ,
-    "u_blur" : 10 ,
+    "u_blur" : 30 ,
     "u_resolution" :k.vec2(k.width(),k.height()),
-    "u_mouse" :k.mousePos()
-
-        })
-    k.loadShaderURL("light", null,'shader/light.frag')
+    "u_mouse" :k.mousePos()});
+    switchcontext =true ;
 
     k.onUpdate(()=> {
-    k.usePostEffect("light",light())
+        if (switchcontext === true){
+            k.usePostEffect("light",light())};
 
 })
-        })
-    }
-
+})
 }
+}
+
+k.onClick("switch",()=> {
+    if (switchcontext === false){
+    const switchtext = k.add([
+        k.text("The light \nis already on",{font:"dos",size:15}),
+        k.pos(30,250),
+
+    ]);
+    k.tween(1,0,3,(opa) =>(switchtext.opacity=opa));
+}
+
+if (switchcontext === true){
+    k.usePostEffect(null);
+    switchcontext = false;
+}
+ })
+
+        
 
 
 let gifonscreen;
