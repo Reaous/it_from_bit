@@ -27,14 +27,20 @@ k.loadSound("nosig","audio/nosig.mp3")
 k.loadSound("screaming","audio/scream.mp3")
 k.loadSound("wave","audio/hi.mp3")
 k.loadSound("smile","audio/smile.mp3")
+k.loadSound("jumpscare","audio/jumpscare.mp3")
 
-
+k.loadSprite("switch","sprites/switch.png")
 k.loadSprite("crt","sprites/crt.png")
 k.loadSprite("menu","sprites/menu.png")
 k.loadSprite("bg2","sprites/bg2.jpg")
 k.loadSprite("crtbg","sprites/crtbg.png")
 k.loadSprite("arrow","sprites/arrow.png")
-k.loadSprite("load","sprites/load.png")
+k.loadSprite("load","gif/loading.png",{
+    sliceX:4,
+    anims: {
+        normal : {from:0,to:3,loop:false}
+    }
+})
 k.loadSprite("gj","sprites/gj.png")
 k.loadSprite("momo","sprites/momo.webp")
 //gifssssssss 
@@ -289,7 +295,7 @@ const tutorialtext= k.add([
 ])
 
 const button = k.add([
-    k.rect(30,30),
+    k.sprite("switch"),
     k.pos(30,300),
     k.area(),
     "switch"
@@ -375,19 +381,26 @@ if (switchcontext === true){
     crt.pos =k.vec2(crt.pos.x +150 ,crt.pos.y);
     arr.opacity =0;
     arl.opacity=0;
-    k.add([
+    const momo = k.add([
         k.sprite("momo"),
         k.pos(30,100),
         k.scale(0.2),
+        k.area(),
         "scare"
     ])
-    k.wait(5,()=> {
-        k.destroy("scare")
-    
-    
-    
 
-    });
+    k.onHover("scare",()=> {
+    k.wait(0.5,()=> {
+        k.play("jumpscare")
+        k.shake(10);
+        momo.scaleTo(10)
+        k.wait(2,()=> {
+            k.usePostEffect(null)
+            k.go("end")
+        })
+    }) 
+    })
+
 }
  })
 
@@ -395,6 +408,7 @@ if (switchcontext === true){
 
 
 let gifonscreen;
+
 const gifscreen = () => {
  current = gifs[currentIndex]
 gifonscreen = bg.add([
@@ -459,22 +473,26 @@ isloading =true;
     })
 
     
-    const loading = bg.add([
-        k.sprite('load'),
-        k.z(10),
+    const loading = k.add([
+        k.sprite('load',{anim:"normal"}),
+        k.scale(0.5),
+        k.pos(200,135),
+        k.z(100),
         "load"
     ]);
     k.wait(1.5,()=>{
         currentIndex++
         currentaudio.paused=true;
         loading.destroy("load")
-        isloading =false;        
-        gifscreen();
-
+        isloading =false;     
+        if  (currentIndex < gifs.length){   
+        gifscreen();}
+        if (currentIndex >= gifs.length){
+            k.shake(10);
+        }
     });
 
 }
-
 if (screenon ===false){
     k.shake(10);
     k.add([
@@ -484,6 +502,7 @@ if (screenon ===false){
     ])
 }
 }
+
 });
 
 
@@ -500,18 +519,23 @@ if (screenon === true){
         arl.scale = k.vec2(0.1)
     })
 
-    const loading = bg.add([
-        k.sprite('load'),
-        k.z(10),
+    const loading = k.add([
+        k.sprite('load',{anim:"normal"}),
+        k.scale(0.5),
+        k.pos(200,135),
+        k.z(100),
         "load"
     ]);
     k.wait(1.5,()=>{
         currentIndex++
         loading.destroy("load")
-        gifscreen();
         isloading =false;
+        if  (currentIndex < gifs.length){   
+        gifscreen();}
+        if (currentIndex >= gifs.length){
+            k.shake(10);
+        }        
     });
-
 
 }
 
@@ -558,4 +582,15 @@ k.onUpdate(()=> {
 });
 
 
-k.go("game")
+k.scene("end",()=> {
+
+k.add([
+    k.text("They broke out. oh no.\n\n Made by reaous <3",{font:"dos",size:30}),
+    k.pos(100,60)
+
+])
+
+});
+
+
+k.go("main")
