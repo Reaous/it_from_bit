@@ -1,6 +1,7 @@
 ## plot 
 This is a game in which you are a gif reviewer in the late 1980's during the advent of pc's when strange entities try to contact humainty via changing the bits. You review the gifs as they are the most susceptable to this "entity" .Do not let them in.
-
+## how to run
+Go to itch io on this link : https://reaous.itch.io/it-from-bit , and then there it is hosted in that ;D
 ## Screenshots 
 <img width="1676" height="973" alt="Screenshot 2026-11-02 062139" src="https://github.com/user-attachments/assets/6cc9ef70-f3e6-4ccf-8e97-51debb570ad7" />
 
