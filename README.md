@@ -1,1 +1,1 @@
-
+This is a game in which you are a gif reviewer in the late 1980's during the advent of pc's when strange entities try to contact humainty via changing the bits. You review the gifs as they are the most susceptable to this "entity" .Do not let them in.
